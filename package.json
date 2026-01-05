@@ -1,0 +1,41 @@
+{
+  "name": "statelog-client",
+  "version": "0.0.27",
+  "description": "A client for statelog https://github.com/egonSchiele/statelog",
+  "homepage": "https://github.com/egonSchiele/statelog-client",
+  "scripts": {
+    "test": "vitest",
+    "test:tsc": "tsc -p tests/tsconfig.json",
+    "coverage": "vitest --coverage",
+    "build": "rm -rf dist && tsc",
+    "start": "cd dist && node index.js",
+    "doc": "typedoc --disableSources --out docs lib && prettier docs/ --write",
+    "doc:prettier": "prettier docs/ --write"
+  },
+  "files": [
+    "./dist"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "type": "module",
+  "types": "./dist/index.d.ts",
+  "keywords": [
+    "statelog",
+    "client"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.19.27",
+    "typescript": "^5.9.3",
+    "vitest": "^1.6.1"
+  },
+  "dependencies": {
+    "nanoid": "^5.1.6"
+  }
+}
