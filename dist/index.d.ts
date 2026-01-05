@@ -9,7 +9,11 @@ export declare class StatelogClient {
     private host;
     private debugMode;
     private tid;
-    constructor(host: string, debug?: boolean);
+    constructor({ host, tid, debugMode, }: {
+        host: string;
+        tid?: string;
+        debugMode?: boolean;
+    });
     debug(message: string, data: any): void;
     graph({ nodes, edges, startNode, }: {
         nodes: string[];

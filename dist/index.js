@@ -1,9 +1,9 @@
 import { nanoid } from "nanoid";
 export class StatelogClient {
-    constructor(host, debug = false) {
+    constructor({ host, tid, debugMode, }) {
         this.host = host;
-        this.debugMode = debug;
-        this.tid = nanoid();
+        this.debugMode = debugMode || false;
+        this.tid = tid || nanoid();
         if (this.debugMode)
             console.log(`Statelog client initialized with host: ${host} and TID: ${this.tid}`);
     }

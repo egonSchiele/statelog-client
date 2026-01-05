@@ -9,10 +9,18 @@ export class StatelogClient {
   private debugMode: boolean;
   private tid: string;
 
-  constructor(host: string, debug: boolean = false) {
+  constructor({
+    host,
+    tid,
+    debugMode,
+  }: {
+    host: string;
+    tid?: string;
+    debugMode?: boolean;
+  }) {
     this.host = host;
-    this.debugMode = debug;
-    this.tid = nanoid();
+    this.debugMode = debugMode || false;
+    this.tid = tid || nanoid();
     if (this.debugMode)
       console.log(
         `Statelog client initialized with host: ${host} and TID: ${this.tid}`
