@@ -9,8 +9,12 @@ export declare class StatelogClient {
     private host;
     private debugMode;
     private tid;
-    constructor({ host, tid, debugMode, }: {
+    private apiKey;
+    private projectId;
+    constructor({ host, apiKey, projectId, tid, debugMode, }: {
         host: string;
+        apiKey: string;
+        projectId: string;
         tid?: string;
         debugMode?: boolean;
     });

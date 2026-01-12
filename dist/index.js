@@ -1,11 +1,17 @@
 import { nanoid } from "nanoid";
 export class StatelogClient {
-    constructor({ host, tid, debugMode, }) {
+    constructor({ host, apiKey, projectId, tid, debugMode, }) {
         this.host = host;
+        this.apiKey = apiKey;
+        this.projectId = projectId;
         this.debugMode = debugMode || false;
         this.tid = tid || nanoid();
-        if (this.debugMode)
+        if (this.debugMode) {
             console.log(`Statelog client initialized with host: ${host} and TID: ${this.tid}`);
+        }
+        if (!this.apiKey) {
+            throw new Error("API key is required for StatelogClient");
+        }
     }
     debug(message, data) {
         this.post({
@@ -91,9 +97,11 @@ export class StatelogClient {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                Authorization: `Bearer ${this.apiKey}`,
             },
             body: JSON.stringify({
                 tid: this.tid,
+                project_id: this.projectId,
                 data: Object.assign(Object.assign({}, body), { timeStamp: new Date().toISOString() }),
             }),
         }).catch((err) => {
