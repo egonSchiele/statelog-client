@@ -8,14 +8,14 @@ export type JSONEdge = {
 export declare class StatelogClient {
     private host;
     private debugMode;
-    private tid;
+    private traceId;
     private apiKey;
     private projectId;
-    constructor({ host, apiKey, projectId, tid, debugMode, }: {
+    constructor(config: {
         host: string;
         apiKey: string;
         projectId: string;
-        tid?: string;
+        traceId?: string;
         debugMode?: boolean;
     });
     debug(message: string, data: any): void;

@@ -1,13 +1,14 @@
 import { nanoid } from "nanoid";
 export class StatelogClient {
-    constructor({ host, apiKey, projectId, tid, debugMode, }) {
+    constructor(config) {
+        const { host, apiKey, projectId, traceId, debugMode } = config;
         this.host = host;
         this.apiKey = apiKey;
         this.projectId = projectId;
         this.debugMode = debugMode || false;
-        this.tid = tid || nanoid();
+        this.traceId = traceId || nanoid();
         if (this.debugMode) {
-            console.log(`Statelog client initialized with host: ${host} and TID: ${this.tid}`);
+            console.log(`Statelog client initialized with host: ${host} and traceId: ${this.traceId}`, { config });
         }
         if (!this.apiKey) {
             throw new Error("API key is required for StatelogClient");
@@ -100,7 +101,7 @@ export class StatelogClient {
                 Authorization: `Bearer ${this.apiKey}`,
             },
             body: JSON.stringify({
-                tid: this.tid,
+                trace_id: this.traceId,
                 project_id: this.projectId,
                 data: Object.assign(Object.assign({}, body), { timeStamp: new Date().toISOString() }),
             }),

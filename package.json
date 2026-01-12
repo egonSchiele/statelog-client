@@ -1,6 +1,6 @@
 {
   "name": "statelog-client",
-  "version": "0.0.29",
+  "version": "0.0.31",
   "description": "A client for statelog, a logging app",
   "homepage": "https://github.com/egonSchiele/statelog-client",
   "scripts": {

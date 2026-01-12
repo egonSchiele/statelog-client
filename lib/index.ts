@@ -7,31 +7,27 @@ export type JSONEdge =
 export class StatelogClient {
   private host: string;
   private debugMode: boolean;
-  private tid: string;
+  private traceId: string;
   private apiKey: string;
   private projectId: string;
 
-  constructor({
-    host,
-    apiKey,
-    projectId,
-    tid,
-    debugMode,
-  }: {
+  constructor(config: {
     host: string;
     apiKey: string;
     projectId: string;
-    tid?: string;
+    traceId?: string;
     debugMode?: boolean;
   }) {
+    const { host, apiKey, projectId, traceId, debugMode } = config;
     this.host = host;
     this.apiKey = apiKey;
     this.projectId = projectId;
     this.debugMode = debugMode || false;
-    this.tid = tid || nanoid();
+    this.traceId = traceId || nanoid();
     if (this.debugMode) {
       console.log(
-        `Statelog client initialized with host: ${host} and TID: ${this.tid}`
+        `Statelog client initialized with host: ${host} and traceId: ${this.traceId}`,
+        { config }
       );
     }
 
@@ -205,7 +201,7 @@ export class StatelogClient {
         Authorization: `Bearer ${this.apiKey}`,
       },
       body: JSON.stringify({
-        tid: this.tid,
+        trace_id: this.traceId,
         project_id: this.projectId,
         data: { ...body, timeStamp: new Date().toISOString() },
       }),
