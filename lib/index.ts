@@ -8,23 +8,36 @@ export class StatelogClient {
   private host: string;
   private debugMode: boolean;
   private tid: string;
+  private apiKey: string;
+  private projectId: string;
 
   constructor({
     host,
+    apiKey,
+    projectId,
     tid,
     debugMode,
   }: {
     host: string;
+    apiKey: string;
+    projectId: string;
     tid?: string;
     debugMode?: boolean;
   }) {
     this.host = host;
+    this.apiKey = apiKey;
+    this.projectId = projectId;
     this.debugMode = debugMode || false;
     this.tid = tid || nanoid();
-    if (this.debugMode)
+    if (this.debugMode) {
       console.log(
         `Statelog client initialized with host: ${host} and TID: ${this.tid}`
       );
+    }
+
+    if (!this.apiKey) {
+      throw new Error("API key is required for StatelogClient");
+    }
   }
 
   debug(message: string, data: any): void {
@@ -189,9 +202,11 @@ export class StatelogClient {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${this.apiKey}`,
       },
       body: JSON.stringify({
         tid: this.tid,
+        project_id: this.projectId,
         data: { ...body, timeStamp: new Date().toISOString() },
       }),
     }).catch((err) => {
