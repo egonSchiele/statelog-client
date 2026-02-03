@@ -92,6 +92,15 @@ export class StatelogClient {
         });
     }
     post(body) {
+        const postBody = JSON.stringify({
+            trace_id: this.traceId,
+            project_id: this.projectId,
+            data: Object.assign(Object.assign({}, body), { timeStamp: new Date().toISOString() }),
+        });
+        if (this.host.toLowerCase() === "stdout") {
+            console.log(postBody);
+            return;
+        }
         const fullUrl = new URL("/api/logs", this.host);
         const url = fullUrl.toString();
         fetch(url, {
@@ -100,11 +109,7 @@ export class StatelogClient {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${this.apiKey}`,
             },
-            body: JSON.stringify({
-                trace_id: this.traceId,
-                project_id: this.projectId,
-                data: Object.assign(Object.assign({}, body), { timeStamp: new Date().toISOString() }),
-            }),
+            body: postBody,
         }).catch((err) => {
             if (this.debugMode)
                 console.error("Failed to send statelog:", err);

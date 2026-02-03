@@ -27,7 +27,7 @@ export class StatelogClient {
     if (this.debugMode) {
       console.log(
         `Statelog client initialized with host: ${host} and traceId: ${this.traceId}`,
-        { config }
+        { config },
       );
     }
 
@@ -191,6 +191,17 @@ export class StatelogClient {
   }
 
   post(body: Record<string, any>): void {
+    const postBody = JSON.stringify({
+      trace_id: this.traceId,
+      project_id: this.projectId,
+      data: { ...body, timeStamp: new Date().toISOString() },
+    });
+
+    if (this.host.toLowerCase() === "stdout") {
+      console.log(postBody);
+      return;
+    }
+
     const fullUrl = new URL("/api/logs", this.host);
     const url = fullUrl.toString();
 
@@ -200,11 +211,7 @@ export class StatelogClient {
         "Content-Type": "application/json",
         Authorization: `Bearer ${this.apiKey}`,
       },
-      body: JSON.stringify({
-        trace_id: this.traceId,
-        project_id: this.projectId,
-        data: { ...body, timeStamp: new Date().toISOString() },
-      }),
+      body: postBody,
     }).catch((err) => {
       if (this.debugMode) console.error("Failed to send statelog:", err);
     });
