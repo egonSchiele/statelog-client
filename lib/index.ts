@@ -36,15 +36,24 @@ export class StatelogClient {
     }
   }
 
-  debug(message: string, data: any): void {
-    this.post({
+  toJSON() {
+    return {
+      traceId: this.traceId,
+      projectId: this.projectId,
+      host: this.host,
+      debugMode: this.debugMode,
+    };
+  }
+
+  async debug(message: string, data: any): Promise<void> {
+    await this.post({
       type: "debug",
       message: message,
       data,
     });
   }
 
-  graph({
+  async graph({
     nodes,
     edges,
     startNode,
@@ -52,8 +61,8 @@ export class StatelogClient {
     nodes: string[];
     edges: Record<string, JSONEdge>;
     startNode?: string;
-  }): void {
-    this.post({
+  }): Promise<void> {
+    await this.post({
       type: "graph",
       nodes,
       edges,
@@ -61,15 +70,21 @@ export class StatelogClient {
     });
   }
 
-  enterNode({ nodeId, data }: { nodeId: string; data: any }): void {
-    this.post({
+  async enterNode({
+    nodeId,
+    data,
+  }: {
+    nodeId: string;
+    data: any;
+  }): Promise<void> {
+    await this.post({
       type: "enterNode",
       nodeId,
       data,
     });
   }
 
-  exitNode({
+  async exitNode({
     nodeId,
     data,
     timeTaken,
@@ -77,8 +92,8 @@ export class StatelogClient {
     nodeId: string;
     data: any;
     timeTaken?: number;
-  }): void {
-    this.post({
+  }): Promise<void> {
+    await this.post({
       type: "exitNode",
       nodeId,
       data,
@@ -86,7 +101,7 @@ export class StatelogClient {
     });
   }
 
-  beforeHook({
+  async beforeHook({
     nodeId,
     startData,
     endData,
@@ -96,8 +111,8 @@ export class StatelogClient {
     startData: any;
     endData: any;
     timeTaken?: number;
-  }): void {
-    this.post({
+  }): Promise<void> {
+    await this.post({
       type: "beforeHook",
       nodeId,
       startData,
@@ -106,7 +121,7 @@ export class StatelogClient {
     });
   }
 
-  afterHook({
+  async afterHook({
     nodeId,
     startData,
     endData,
@@ -116,8 +131,8 @@ export class StatelogClient {
     startData: any;
     endData: any;
     timeTaken?: number;
-  }): void {
-    this.post({
+  }): Promise<void> {
+    await this.post({
       type: "afterHook",
       nodeId,
       startData,
@@ -126,7 +141,7 @@ export class StatelogClient {
     });
   }
 
-  followEdge({
+  async followEdge({
     fromNodeId,
     toNodeId,
     isConditionalEdge,
@@ -136,8 +151,8 @@ export class StatelogClient {
     toNodeId: string;
     isConditionalEdge: boolean;
     data: any;
-  }): void {
-    this.post({
+  }): Promise<void> {
+    await this.post({
       type: "followEdge",
       edgeId: `${fromNodeId}->${toNodeId}`,
       fromNodeId,
@@ -147,7 +162,7 @@ export class StatelogClient {
     });
   }
 
-  promptCompletion({
+  async promptCompletion({
     messages,
     completion,
     model,
@@ -157,8 +172,8 @@ export class StatelogClient {
     completion: any;
     model?: string;
     timeTaken?: number;
-  }): void {
-    this.post({
+  }): Promise<void> {
+    await this.post({
       type: "promptCompletion",
       messages,
       completion,
@@ -167,7 +182,7 @@ export class StatelogClient {
     });
   }
 
-  toolCall({
+  async toolCall({
     toolName,
     args,
     output,
@@ -179,8 +194,8 @@ export class StatelogClient {
     output: any;
     model?: string;
     timeTaken?: number;
-  }): void {
-    this.post({
+  }): Promise<void> {
+    await this.post({
       type: "toolCall",
       toolName,
       args,
@@ -190,7 +205,7 @@ export class StatelogClient {
     });
   }
 
-  post(body: Record<string, any>): void {
+  async post(body: Record<string, any>): Promise<void> {
     const postBody = JSON.stringify({
       trace_id: this.traceId,
       project_id: this.projectId,
@@ -205,7 +220,7 @@ export class StatelogClient {
     const fullUrl = new URL("/api/logs", this.host);
     const url = fullUrl.toString();
 
-    fetch(url, {
+    await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
