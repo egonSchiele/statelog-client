@@ -209,7 +209,7 @@ export class StatelogClient {
     const postBody = JSON.stringify({
       trace_id: this.traceId,
       project_id: this.projectId,
-      data: { ...body, timeStamp: new Date().toISOString() },
+      data: { ...body, timestamp: new Date().toISOString() },
     });
 
     if (this.host.toLowerCase() === "stdout") {
