@@ -57,11 +57,17 @@ export declare class StatelogClient {
         isConditionalEdge: boolean;
         data: any;
     }): Promise<void>;
-    promptCompletion({ messages, completion, model, timeTaken, }: {
+    promptCompletion({ messages, completion, model, timeTaken, tools, responseFormat, }: {
         messages: any[];
         completion: any;
         model?: string;
         timeTaken?: number;
+        tools?: {
+            name: string;
+            description?: string;
+            schema: any;
+        }[];
+        responseFormat?: any;
     }): Promise<void>;
     toolCall({ toolName, args, output, model, timeTaken, }: {
         toolName: string;

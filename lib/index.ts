@@ -167,11 +167,19 @@ export class StatelogClient {
     completion,
     model,
     timeTaken,
+    tools,
+    responseFormat,
   }: {
     messages: any[];
     completion: any;
     model?: string;
     timeTaken?: number;
+    tools?: {
+      name: string;
+      description?: string;
+      schema: any;
+    }[];
+    responseFormat?: any;
   }): Promise<void> {
     await this.post({
       type: "promptCompletion",
@@ -179,6 +187,8 @@ export class StatelogClient {
       completion,
       model,
       timeTaken,
+      tools,
+      responseFormat,
     });
   }
 

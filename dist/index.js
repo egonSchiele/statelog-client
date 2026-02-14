@@ -104,13 +104,15 @@ export class StatelogClient {
         });
     }
     promptCompletion(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ messages, completion, model, timeTaken, }) {
+        return __awaiter(this, arguments, void 0, function* ({ messages, completion, model, timeTaken, tools, responseFormat, }) {
             yield this.post({
                 type: "promptCompletion",
                 messages,
                 completion,
                 model,
                 timeTaken,
+                tools,
+                responseFormat,
             });
         });
     }
