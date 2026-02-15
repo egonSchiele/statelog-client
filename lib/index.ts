@@ -216,6 +216,10 @@ export class StatelogClient {
   }
 
   async post(body: Record<string, any>): Promise<void> {
+    if (!this.host) {
+      return;
+    }
+
     const postBody = JSON.stringify({
       trace_id: this.traceId,
       project_id: this.projectId,
@@ -227,18 +231,25 @@ export class StatelogClient {
       return;
     }
 
-    const fullUrl = new URL("/api/logs", this.host);
-    const url = fullUrl.toString();
+    try {
+      const fullUrl = new URL("/api/logs", this.host);
+      const url = fullUrl.toString();
 
-    await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${this.apiKey}`,
-      },
-      body: postBody,
-    }).catch((err) => {
-      if (this.debugMode) console.error("Failed to send statelog:", err);
-    });
+      await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.apiKey}`,
+        },
+        body: postBody,
+      }).catch((err) => {
+        if (this.debugMode) console.error("Failed to send statelog:", err);
+      });
+    } catch (err) {
+      if (this.debugMode)
+        console.error("Error sending log in statelog client:", err, {
+          host: this.host,
+        });
+    }
   }
 }
